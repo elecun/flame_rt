@@ -1,7 +1,7 @@
 /**
  * @file log.hpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Byunghun Hwang <bh.hwang@iae.re.kr>
+ * @brief Logger interface
  * @version 0.1
  * @date 2024-04-18
  * 
