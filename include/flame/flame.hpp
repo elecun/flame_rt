@@ -9,8 +9,8 @@
  * 
  */
 
- #ifndef FLAME_INCLUDE_FLAME_HPP
- #define FLAME_INCLUDE_FLAME_HPP
+ #ifndef FLAME_FLAME_HPP_INCLUDED
+ #define FLAME_FLAME_HPP_INCLUDED
 
  #include <flame/core.hpp>
 

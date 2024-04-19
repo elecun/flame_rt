@@ -1,7 +1,7 @@
 /**
  * @file interface.hpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Byunghun Hwang (bh.hwang@iae.re.kr)
+ * @brief Interface class
  * @version 0.1
  * @date 2024-04-18
  * 
@@ -9,8 +9,8 @@
  * 
  */
 
- #ifndef FLAME_INCLUDE_INTERFACE_HPP
- #define FLAME_INCLUDE_INTERFACE_HPP
+ #ifndef FLAME_INTERFACE_HPP_INCLUDED
+ #define FLAME_INTERFACE_HPP_INCLUDED
 
  #include <flame/interface/log.hpp>
 

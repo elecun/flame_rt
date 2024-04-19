@@ -1,7 +1,7 @@
 /**
  * @file core.hpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Byunghun Hwang (bh.hwang@iae.re.kr)
+ * @brief Flame framework core header
  * @version 0.1
  * @date 2024-04-18
  * 
@@ -9,9 +9,11 @@
  * 
  */
 
- #ifndef FLAME_INCLUDE_CORE_HPP
- #define FLAME_INCLUDE_CORE_HPP
+ #ifndef FLAME_CORE_HPP_INCLUDED
+ #define FLAME_CORE_HPP_INCLUDED
 
- 
+ #include <flame/core/version.hpp>
+
+
 
  #endif
