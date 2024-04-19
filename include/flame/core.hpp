@@ -9,11 +9,13 @@
  * 
  */
 
- #ifndef FLAME_CORE_HPP_INCLUDED
- #define FLAME_CORE_HPP_INCLUDED
+#ifndef FLAME_CORE_HPP_INCLUDED
+#define FLAME_CORE_HPP_INCLUDED
 
- #include <flame/core/version.hpp>
+#include <flame/core/version.hpp>
 
+ 
 
+using namespace flame;
 
- #endif
+#endif
