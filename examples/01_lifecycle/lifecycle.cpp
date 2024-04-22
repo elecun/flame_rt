@@ -22,7 +22,29 @@ namespace example {
 
     class lifecycle final : public TaskImpl<Periodic> {
         public:
-            
-    }
+
+        // initialize once before start
+        void on_init() override {
+
+        }
+
+        void on_setup() override {
+
+        }
+
+        // running task for every time set up
+        void on_loop() override {
+
+        }
+
+        void on_destory() override {
+
+        }
+
+        FLAME_TASK
+
+    };
+
+    FLAME_DECLARE(lifecycle)
 
 }
