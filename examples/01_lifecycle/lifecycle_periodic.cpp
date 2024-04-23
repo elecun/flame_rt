@@ -23,20 +23,27 @@ namespace example {
     class lifecycle final : public TaskImpl<Periodic> {
         public:
 
-        // initialize once before start
+        /**
+         * @brief initialize only once before start
+         * 
+         */
         void on_init() override {
 
         }
 
-        void on_setup() override {
 
-        }
-
-        // running task for every time set up
+        /**
+         * @brief callback for periodical running
+         * 
+         */
         void on_loop() override {
 
         }
 
+        /**
+         * @brief 
+         * 
+         */
         void on_destory() override {
 
         }

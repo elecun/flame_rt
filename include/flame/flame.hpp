@@ -13,5 +13,6 @@
  #define FLAME_FLAME_HPP_INCLUDED
 
  #include <flame/core.hpp>
+ #include <flame/task.hpp>
 
  #endif
