@@ -14,9 +14,14 @@
 
 namespace flame_rt {
 
+    /* global instance functions */
     bool init(const char* config_path);
     void run();
     void cleanup();
+
+    /* database */
+    void db_init();
+    bool db_open();
     
 }
 
