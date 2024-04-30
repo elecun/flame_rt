@@ -9,8 +9,8 @@
  * 
  */
 
- #ifndef FLAME_INTERFACE_LOG_HPP_INCLUDED
- #define FLAME_INTERFACE_LOG_HPP_INCLUDED
+#ifndef FLAME_INTERFACE_LOG_HPP_INCLUDED
+#define FLAME_INTERFACE_LOG_HPP_INCLUDED
 
 #include <dep/spdlog/spdlog.h>
 #include <dep/spdlog/sinks/stdout_color_sinks.h>
@@ -19,4 +19,4 @@
 namespace console = spdlog;
 
 
- #endif
+#endif
