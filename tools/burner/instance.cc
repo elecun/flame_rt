@@ -5,11 +5,37 @@
 #include <fstream>
 #include <dep/json.hpp>
 #include "def.hpp"
+#include "manager.hpp"
+#include <dep/libzmq/zmq.hpp>
+#include <thread>
 
 using namespace std;
 using json = nlohmann::json;
 
 namespace flame_rt {
+
+    /**
+     * @brief CLI responding thread
+     * 
+     * @param context 
+     */
+    void cli_thread(zmq::context_t* context, int access_port){
+        zmq::socket_t socket(*context, zmq::socket_type::rep);
+        socket.bind (fmt::format("tcp://*:{}", access_port));
+
+        while (true) {
+            zmq::message_t request;
+            responder.recv(&request); // 요청 수신
+
+            std::cout << "Received request: " << static_cast<char*>(request.data()) << std::endl;
+
+            // 응답 작성 및 전송
+            zmq::message_t reply(5);
+            memcpy(reply.data(), "World", 5);
+            responder.send(reply);
+        }
+    }
+
     /**
      * @brief read configuration file (JSON) & initialize
      * 
@@ -49,11 +75,26 @@ namespace flame_rt {
             return false;
         }
 
-        /* required services */
-        if(config.find(__CONFIG_KEY_REQUIRED__)!=config.end()){
-            //if(config[__CONFIG_KEY_REQUIRED__].find(__CONFIG_KEY_REQUIRED_SERVICE__)!=config[])
+        /* zmq server creation */
+        if(config.find(__CONFIG_KEY_ACCESS__)!=config.end()){
+            int access_port = config[__CONFIG_KEY_ACCESS__].get<int>();
+            zmq::context_t context(1); //io thread = 1
+            thread cli_responder(cli_thread, &context, access_port); //responding thread
+            console::info("CLI accessiable : {}", access_port);
         }
 
+        /* list-up required bundles */
+        // if(config.find(__CONFIG_KEY_REQUIRED__)!=config.end()){
+        //     auto config_required = config[__CONFIG_KEY_REQUIRED__];
+
+        //     if(config_required.find(__CONFIG_KEY_REQUIRED_BUNDLE__)!=config_required.end()){
+        //         vector<string> required_bundle = config_required[__CONFIG_KEY_REQUIRED_BUNDLE__].get<vector<string>>();
+        //         for(string& bundle:required_bundle){
+        //             bundle_manager->load(bundle.c_str());
+        //             //install(bundle.c_str());
+        //         }
+        //     }
+        // }
 
         return true;
     }
