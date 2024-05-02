@@ -15,37 +15,38 @@
 #include <dep/libzmq/zmq.h>
 #include <thread>
 #include <vector>
-#include <queue>
-#include <functional>
-#include <condition_variable>
+
+#include "cli.hpp"
+
 
 using namespace std;
 
 namespace flame_rt {
 
-    /* global instance functions */
+    static remote_cli* _cli = nullptr;
+
+    /**
+     * @brief initialization
+     * 
+     * @param config_path configuration file(*.conf) path(absolute)
+     * @return true if success
+     * @return false if failed
+     */
     bool init(const char* config_path);
+
+    /**
+     * @brief run application with bundles
+     * 
+     */
     void run();
+
     void cleanup();
+    void signal_callback(int sig);
+    void terminate();
 
     /* database */
     void db_init();
     bool db_open();
-
-    /* command line interface */
-
-    class cli_server {
-        public:
-        cli_server() = default;
-        ~cli_server() = default;
-
-        private:
-        vector<thread> _thread_pool;
-        queue<std::function<void()>> jobs_;
-        std::condition_variable cv_job_q_;
-        std::mutex m_job_q_;
-
-    }; /* class */
 } /* namespace */
 
 #endif

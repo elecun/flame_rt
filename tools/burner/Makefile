@@ -64,12 +64,15 @@ RM	= rm -rf
 
 # flame service engine
 burner:	$(BUILDDIR)burner_entry.o \
-		$(BUILDDIR)instance.o
+		$(BUILDDIR)instance.o \
+		$(BUILDDIR)cli.o
 		$(CC) $(LDFLAGS) $(LD_LIBRARY_PATH) -o $(BUILDDIR)$@ $^ $(LDLIBS)
 
 $(BUILDDIR)burner_entry.o:	$(CURRENT_DIR)/burner_entry.cc
 					$(CC) $(CXXFLAGS) $(INCLUDE_DIR) -c $^ -o $@
 $(BUILDDIR)instance.o: $(CURRENT_DIR)/instance.cc
+					$(CC) $(CXXFLAGS) $(INCLUDE_DIR) -c $^ -o $@
+$(BUILDDIR)cli.o: $(CURRENT_DIR)/cli.cc
 					$(CC) $(CXXFLAGS) $(INCLUDE_DIR) -c $^ -o $@
 
 

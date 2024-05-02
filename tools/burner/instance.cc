@@ -1,50 +1,56 @@
 
-#include "instance.hpp"
-#include <flame/interface/log.hpp>
+/**
+ * @file instance.cc
+ * @author Byunghun hwang <bh.hwang@iae.re.kr>
+ * @brief Application instance for burner
+ * @version 0.1
+ * @date 2024-05-02
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <filesystem>
 #include <fstream>
+#include <thread>
+#include <csignal>
+
 #include <dep/json.hpp>
+#include <dep/libzmq/zmq.hpp>
+#include <flame/interface/log.hpp>
+
+#include "instance.hpp"
 #include "def.hpp"
 #include "manager.hpp"
-#include <dep/libzmq/zmq.hpp>
-#include <thread>
 
 using namespace std;
 using json = nlohmann::json;
 
 namespace flame_rt {
 
-    /**
-     * @brief CLI responding thread
-     * 
-     * @param context 
-     */
-    void cli_thread(zmq::context_t* context, int access_port){
-        zmq::socket_t socket(*context, zmq::socket_type::rep);
-        socket.bind (fmt::format("tcp://*:{}", access_port));
-
-        while (true) {
-            zmq::message_t request;
-            responder.recv(&request); // 요청 수신
-
-            std::cout << "Received request: " << static_cast<char*>(request.data()) << std::endl;
-
-            // 응답 작성 및 전송
-            zmq::message_t reply(5);
-            memcpy(reply.data(), "World", 5);
-            responder.send(reply);
-        }
+    void terminate(){
+        flame_rt::cleanup();
+        exit(EXIT_SUCCESS);
     }
 
-    /**
-     * @brief read configuration file (JSON) & initialize
-     * 
-     * @param config_path 
-     * @return true if success
-     * @return false read failed
-     */
+    /* signal callback functions */
+    void signal_callback(int sig) {
+        switch(sig){
+            case SIGSEGV: { console::warn("Signal : Segmentation violation"); } break;
+            case SIGABRT: { /*console::warn("Signal : Abnormal termination");*/ } break;
+            case SIGKILL: { console::warn("Signal : Process killed"); } break;
+            case SIGBUS: { console::warn("Signal : Bus Error"); } break;
+            case SIGTERM: { console::warn("Signal : Termination requested"); } break;
+            case SIGINT: { console::warn("Signal : Interrupted"); } break;
+            default:
+            console::info("Cleaning up the program");
+        }
+        terminate(); 
+    }
+
     bool init(const char* config_path){
 
+        // 1. read configuration file(*.conf as JSON)
         filesystem::path _conf_path(config_path);
         json config;
 
@@ -75,26 +81,12 @@ namespace flame_rt {
             return false;
         }
 
-        /* zmq server creation */
+        /* zmq cli server creation */
         if(config.find(__CONFIG_KEY_ACCESS__)!=config.end()){
             int access_port = config[__CONFIG_KEY_ACCESS__].get<int>();
-            zmq::context_t context(1); //io thread = 1
-            thread cli_responder(cli_thread, &context, access_port); //responding thread
-            console::info("CLI accessiable : {}", access_port);
+            _cli = new remote_cli("tcp", access_port);
+            console::info("Start supporting CLI...");
         }
-
-        /* list-up required bundles */
-        // if(config.find(__CONFIG_KEY_REQUIRED__)!=config.end()){
-        //     auto config_required = config[__CONFIG_KEY_REQUIRED__];
-
-        //     if(config_required.find(__CONFIG_KEY_REQUIRED_BUNDLE__)!=config_required.end()){
-        //         vector<string> required_bundle = config_required[__CONFIG_KEY_REQUIRED_BUNDLE__].get<vector<string>>();
-        //         for(string& bundle:required_bundle){
-        //             bundle_manager->load(bundle.c_str());
-        //             //install(bundle.c_str());
-        //         }
-        //     }
-        // }
 
         return true;
     }
@@ -104,6 +96,8 @@ namespace flame_rt {
     }
 
     void cleanup(){
-
+        /* clear cli*/
+        if(_cli)
+            delete _cli;
     }
 }
