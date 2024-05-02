@@ -13,8 +13,7 @@
 #define FLAME_RT_TOOLS_BURNER_DEF_HPP_INCLUDED
 
 
+#define __CONFIG_KEY_ACCESS__ "access"
 #define __CONFIG_KEY_REQUIRED__ "required"
-    #define __CONFIG_KEY_REQUIRED_SERVICE__ "service"
-    #define __CONFIG_KEY_REQUIRED_AUTOSTART__ "autostart"
-
+    #define __CONFIG_KEY_REQUIRED_BUNDLE__ "bundle"
 #endif
